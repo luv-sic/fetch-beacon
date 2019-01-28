@@ -1,0 +1,24 @@
+{
+  "name": "fetch-beacon",
+  "version": "0.0.1",
+  "description": "tiny HTTP client that implements sendBeacon API",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luv-sic/fetch-beacon.git"
+  },
+  "keywords": [
+    "http",
+    "fetch",
+    "sendBeacon"
+  ],
+  "author": "youruichao@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luv-sic/fetch-beacon/issues"
+  },
+  "homepage": "https://github.com/luv-sic/fetch-beacon#readme"
+}
