@@ -125,7 +125,7 @@ module.exports = {
   // setupFiles: [],
   "setupFiles": [
     "./setupJest.js"
-  ]
+  ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -166,7 +166,7 @@ module.exports = {
   // testURL: "http://localhost",
 
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
-  // timers: "real",
+  timers: "fake",
 
   // A map from regular expressions to paths to transformers
   // transform: null,

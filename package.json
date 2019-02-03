@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup lib/index.mjs --format=umd --name=beacon --file=fetch-beacon.umd.js",
-    "test": "jest --watch"
+    "test": "jest --watch --verbose false --runInBand"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.3.1",
     "babel-jest": "^24.0.0",
     "create-test-server": "^2.4.0",
+    "eslint": "^5.12.1",
     "jest": "^24.0.0",
     "jest-fetch-mock": "^2.1.0",
     "rollup": "^1.1.2",

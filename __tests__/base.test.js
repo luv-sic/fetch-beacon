@@ -1,60 +1,81 @@
 import createTestServer from 'create-test-server';
-import beacon, { TimeoutError } from '../lib';
-
-jest.setTimeout(12000);
-jest.useFakeTimers();
+import beacon, { TimeoutError, getCache, defaultOptions, delay } from '../lib';
 
 let server;
 const plaintext = 'plain text';
 beforeEach(async () => {
+	jest.setTimeout(12000);
 	server = await createTestServer();
 	server.get('/', async (request, response) => {
-		response.end(plaintext)
+		response.end(plaintext);
 	});
-	server.get('/500', async (request, response) => {
-		response.status(500).end()
+	server.put('/500', async (request, response) => {
+		response.status(500).end('');
 	});
-	server.post('/timeout/11s', async (request, response) => {
-		setTimeout(() => {
-			response.end(plaintext)
-		}, 11000);
+	server.delete('/timeout/11s', async (request, response) => {
+		await delay(11000)
+		response.end(plaintext);
 	});
-	server.post('/timeout/5s', async (request, response) => {
-		setTimeout(() => {
-			response.end(plaintext)
-		}, 5000);
+	server.post('/timeout/2s', async (request, response) => {
+		await delay(2000)
+		response.end(plaintext);
 	});
+});
+
+afterEach(async () => {
+	await server.close()
+	jest.clearAllTimers()
 });
 
 describe('basic fetch', async () => {
 	it('should fetch normally', async () => {
 		const response = await beacon(server.url);
 		expect(response.ok).toBe(true);
-	})
-
-	it('should return 500', async () => {
-		return beacon(server.url+ '/500').catch(response => {
-			expect(response.status).toBe(500);
-		})
-	})
-
-	it('should return TimeoutError with default timeout', async () => {
-		return beacon(server.url + '/timeout/11s', {
-			method: 'post'
-		}).catch(error => {
-			expect(error instanceof TimeoutError).toBe(true);
-		})
 	});
 
-	it('should return TimeoutError with custom timeout', async () => {
-		return beacon(server.url + '/timeout/5s', {
-			method: 'post',
-			timeout: 6000
-		}).catch(error => {
-			console.log('error :', JSON.stringify(error));
-			expect(error instanceof TimeoutError).toBe(true);
-		})
+	it('should return 500', async () => {
+		const errorUrl = server.url + '/500';
+		return beacon(errorUrl, {
+			method: 'put'
+		}).catch(response => {
+			expect(response.status).toBe(500);
+		});
 	});
 });
 
-afterEach(async () => await server.close())
+describe('fetch with timeout', async () => {
+	it('should return TimeoutError with default timeout', async () => {
+		return beacon(server.url + '/timeout/11s', {
+			method: 'delete',
+		}).catch(error => {
+			expect(error instanceof TimeoutError).toBe(true);
+		});
+	});
+	
+	it('should return TimeoutError with custom timeout', async () => {
+		return beacon(server.url + '/timeout/2s', {
+			method: 'post',
+			timeout: 1000,
+		}).catch(error => {
+			expect(error).toBeInstanceOf(TimeoutError);
+		});
+	});
+})
+
+describe('fetch with cache', async () => {
+	it('should cache failed request', async () => {
+		const timeoutUrl = server.url + '/timeout/2s';
+		const options = {
+			timeout: 1000,
+		}
+		return beacon(timeoutUrl, options).catch(() => {
+			expect(getCache()[0]).toEqual({
+				input: timeoutUrl,
+				options: {
+					...defaultOptions,
+					...options,
+				},
+			})
+		});
+	});
+})
