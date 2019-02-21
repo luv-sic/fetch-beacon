@@ -1,5 +1,5 @@
 import createTestServer from 'create-test-server';
-import beacon, { TimeoutError, getCache, defaultOptions, delay } from '../lib';
+import beacon, { TimeoutError, getCache, defaultOptions, delay, clearCache } from '../lib';
 
 let server;
 const plaintext = 'plain text';
@@ -28,12 +28,12 @@ afterEach(async () => {
 });
 
 describe('basic fetch', async () => {
-	it('should fetch normally', async () => {
+	test('should fetch normally', async () => {
 		const response = await beacon(server.url);
 		expect(response.ok).toBe(true);
 	});
 
-	it('should return 500', async () => {
+	test('should return 500', async () => {
 		const errorUrl = server.url + '/500';
 		return beacon(errorUrl, {
 			method: 'put'
@@ -44,15 +44,15 @@ describe('basic fetch', async () => {
 });
 
 describe('fetch with timeout', async () => {
-	it('should return TimeoutError with default timeout', async () => {
+	test('should return TimeoutError with default timeout', async () => {
 		return beacon(server.url + '/timeout/11s', {
 			method: 'delete',
 		}).catch(error => {
-			expect(error instanceof TimeoutError).toBe(true);
+			expect(error).toBeInstanceOf(TimeoutError);
 		});
 	});
 	
-	it('should return TimeoutError with custom timeout', async () => {
+	test('should return TimeoutError with custom timeout', async () => {
 		return beacon(server.url + '/timeout/2s', {
 			method: 'post',
 			timeout: 1000,
@@ -63,7 +63,7 @@ describe('fetch with timeout', async () => {
 })
 
 describe('fetch with cache', async () => {
-	it('should cache failed request', async () => {
+	test('should cache failed request', async () => {
 		const timeoutUrl = server.url + '/timeout/2s';
 		const options = {
 			timeout: 1000,
@@ -77,5 +77,13 @@ describe('fetch with cache', async () => {
 				},
 			})
 		});
+	});
+
+	test('should clear cache when document reload', async () => {
+		// const times = getCache().length;
+		// return (async () => {
+		// 	await delay(5000)
+		// 	expect(clearCache).toBeCalledTimes(times)
+		// })()
 	});
 })
