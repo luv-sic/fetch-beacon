@@ -1,6 +1,6 @@
 {
   "name": "fetch-beacon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "tiny HTTP client that implements sendBeacon API",
   "main": "lib/index.js",
   "scripts": {
