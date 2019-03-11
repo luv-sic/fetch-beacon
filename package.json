@@ -4,8 +4,8 @@
   "description": "tiny HTTP client that implements sendBeacon API",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup lib/index.mjs --format=umd --name=beacon --file=fetch-beacon.umd.js",
-    "test": "jest --watch --verbose false --runInBand"
+    "build": "rollup lib/index.js --format=umd --name=beacon --file=fetch-beacon.umd.js",
+    "test": "jest --watch --runInBand"
   },
   "repository": {
     "type": "git",

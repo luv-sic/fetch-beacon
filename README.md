@@ -35,7 +35,7 @@ import beacon from 'fetch-beacon';
 
 Same as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch), except folloing option.
 
-Unlike fetch, `fetch-beacon` will throw an Error if the response status code is not 2XX. it will cache the failed request when get below status code or `TimeoutError` and retry it when document load again.
+`fetch-beacon` will cache the failed request when get below status code or `TimeoutError` and retry it when document load again.
 
 Status codes: 408 413 429 500 502 503 504
 
