@@ -1,18 +1,16 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true,
-    "node": true,
-    "jest": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "extends": [
-    "eslint:recommended"
-  ],
-  "globals": {
-    "safari": false
-  }
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true,
+		"jest": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 2015,
+		"sourceType": "module"
+	},
+	"extends": ["eslint:recommended"],
+	"globals": {
+		"safari": false
+	}
 }
